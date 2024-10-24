@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Anton&family=Playfair+Display:wght@500&display=swap');
 
 /* Apply Anton to headers (h1, h2, h3) */
-h1, h2, h3 {
+h1 {
     font-family: 'Anton', sans-serif !important;
     font-weight: 400;
 }
 
 /* Apply Playfair Display to subheaders (h4, h5, h6) */
-h4, h5, h6 {
+h2, h3 {
     font-family: 'Playfair Display', serif !important;
     font-weight: 500;
 }
