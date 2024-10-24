@@ -159,6 +159,7 @@ def create_prompt(subject, topic, learning_objective):
     and skill error that needs to be worked on: '{learning_objective}'
     The subject is '{subject}'.
     Return the questions and suggested answers in bolded headers.
+    Do not generate any other text aside from the question and answer.
     """
 
 # Function to call OpenAI API to generate questions and answers
