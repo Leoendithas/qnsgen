@@ -88,7 +88,7 @@ def get_learning_objectives(topic):
     "EquationsQuadraticFormulaDiscriminant": ["MixedCoefficients"],
     "RoundingDecimals": ["RoundErrorUpDown"],
     
-    "English": [
+    "-": [
     "Add: Adjective",
     "Add: Adverb",
     "Add: Conjunction",
