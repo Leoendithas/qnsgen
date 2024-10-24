@@ -322,7 +322,7 @@ def methodology_page():
         but might not have the resources to follow up on student's errors.
     """)
     st.image("images/Error Tracking.svg", width = 800)
-    st.write("Teacher's error tag page which shows what the most common errors students face.")
+    st.caption("Teacher's error tag page which shows what the most common errors students face.")
     st.header("Proposed Solution")
     st.write("""
         Teachers can use the Question Generator to follow up on student's errors through generating
