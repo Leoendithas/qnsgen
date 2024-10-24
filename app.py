@@ -346,6 +346,7 @@ def home_page():
         Enjoy!
 
         Best, 
+        
         Lance & Addie
     """)
 
