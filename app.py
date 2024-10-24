@@ -176,11 +176,15 @@ def generate_questions_and_answers(prompt):
 
 # Function to regenerate selected questions
 def regenerate_questions(selected_questions):
+
+    # Get the number of selected questions
+    num_questions = len(selected_questions)    
+
     # Create a new prompt by concatenating selected questions
     prompt = f"""You are a seasoned educator who specialises in helping students close their learning gaps.
     Using the following questions and their answers as reference, 
-    generate new questions and their suggested answers based on the number of questions 
-    provided:\n\n""" + "\n\n".join(selected_questions)
+    generate {num_questions} new question(s) and their suggested answers:
+    \n\n""" + "\n\n".join(selected_questions)
     
     
     # Regenerate the questions using OpenAI
@@ -232,7 +236,7 @@ def generate_questions_page():
             qas_list = questions_and_answers.split("\n\n")
             for i, qa in enumerate(qas_list):
                 # Insert new lines between question and answer and bold the headers
-                formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
+                formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '**Suggested Answer:**\n')
                 formatted_qas.append(formatted_qa)
 
             # Store the formatted questions and answers in session state
