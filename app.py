@@ -321,7 +321,7 @@ def methodology_page():
         Teachers can track student's errors using the new error tag tracking features, 
         but might not have the resources to follow up on student's errors.
     """)
-    st.image("images/Error Tracking.svg", width = 400)
+    st.image("images/Error Tracking.svg", width = 800)
     st.write("Teacher's error tag page which shows what the most common errors students face.")
     st.header("Proposed Solution")
     st.write("""
