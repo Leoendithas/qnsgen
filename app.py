@@ -341,6 +341,7 @@ def home_page():
         The Question Generator seeks to smoothen this process by having an LLM generate follow-up questions based on the 'Error Tags' indicated on SLS.
         
         Teachers can save the questions generated, or regenerate new ones should they find the questions not suitable.
+        
         **We hope this will help teachers to better close learning gaps for their students.**
         Enjoy!
 
