@@ -1,6 +1,10 @@
 import streamlit as st
 from openai import OpenAI
 
+#Font Initialisation
+with open( ".streamlit\style.css" ) as css:
+    st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
+
 # Initialize the OpenAI API key
 client = OpenAI(api_key=st.secrets["api_keys"]["openai"])
 
