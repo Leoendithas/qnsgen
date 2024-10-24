@@ -329,11 +329,54 @@ def methodology_page():
         Thereafter, they can deploy the questions to students for practice and further assessment for learning.
     """)
 
-# Main Navigation
+# Page: Home
+def home_page():
+    st.title("Welcome to the Error Tag Question Generator!")
+    st.write("""
+        This site is a part of the AI Champions Bootcamp.
+        This site mocks up a feature for the Singapore Student Learning Space.
+        When teachers have analysed their students' errors, they have to manually look for resources to follow up on their student's mistakes.
+        The Question Generator seeks to smoothen this process by having an LLM generate follow-up questions based on the 'Error Tags' indicated on SLS.
+        
+        Teachers can save the questions generated, or regenerate should they find the questions not suitable.
+        We hope this will help teachers to better close learning gaps.
+        Enjoy!
+
+        - Lance & Addie
+    """)
+
+# Function to display the important notice
+def display_important_notice():
+    # Display the notice only if the user hasn't acknowledged it
+    if 'notice_acknowledged' not in st.session_state:
+        st.session_state['notice_acknowledged'] = False
+    
+    # If notice is not acknowledged, show the popup
+    if not st.session_state['notice_acknowledged']:
+            st.info("""
+                **IMPORTANT NOTICE**: This web application is developed as a proof-of-concept prototype.
+                The information provided here is **NOT** intended for actual usage and should not be relied upon for making any decisions, 
+                especially those related to financial, legal, or healthcare matters.
+
+                Furthermore, please be aware that the LLM may generate inaccurate or incorrect information.
+                You assume full responsibility for how you use any generated output.
+
+                Always consult with qualified professionals for accurate and personalized advice.
+            """)
+
+            # Acknowledge button
+            if st.button("Acknowledge"):
+                st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
+
+# Main function where the notice is displayed and other page logic is handled
 def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Select a page:", ["Generate Questions", "View Saved Questions", "Methodology", "About Us"])
 
+    # Display the important notice only on the first visit (or until acknowledged)
+    display_important_notice()
+
+    # Page routing
     if page == "Generate Questions":
         generate_questions_page()
     elif page == "View Saved Questions":
