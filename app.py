@@ -252,12 +252,11 @@ def generate_questions_page():
         # Display generated questions with individual checkboxes
         selected_for_saving = []
         for i, qa in enumerate(st.session_state['questions_and_answers']):
-            if select_all:
+            # If "Select All" is enabled, automatically check all checkboxes but keep them enabled
+            checked = select_all or st.checkbox(qa, key=f"qa_{i}")
+            
+            if checked:
                 selected_for_saving.append(qa)
-                st.checkbox(qa, value=True, key=f"qa_{i}", disabled=True)  # Keep the actual generated QA text
-            else:
-                if st.checkbox(qa, key=f"qa_{i}"):
-                    selected_for_saving.append(qa)
         
         # Show Save and Regenerate buttons even if no checkboxes are selected
         col1, col2 = st.columns(2)
