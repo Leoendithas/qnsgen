@@ -336,13 +336,13 @@ def home_page():
         This site is a project for the AI Champions Bootcamp (2024).
     """)
     st.header("Context")
-        st.write("""
+    st.write("""
         Assessment for learning is part and parcel of a teacher's life. After marking their students' work, teachers spend time analysing student's mistakes and identifying learning gaps to follow up on.
         Thereafter, they have to look for resources to cover these learning gaps.
         However, resources may be scarce or may not be well classified.
         """)
     st.header("Proposed Solution")
-        st.write("""
+    st.write("""
         The Question Generator seeks to smoothen this process by having an LLM generate follow-up questions based on the 'Error Tags' indicated on SLS.
         These error tags are represented by the 'Skills' that need to be learnt, as well as the 'Skill Error' commonly committed by students for that concept.
         
