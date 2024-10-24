@@ -169,7 +169,7 @@ def generate_questions_and_answers(prompt):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=400,
+        max_tokens=800,
         temperature=0.3
     )
     return response.choices[0].message.content.strip()
