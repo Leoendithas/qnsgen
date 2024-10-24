@@ -144,7 +144,7 @@ def get_learning_objectives(topic):
     "Replace: Verb Tense",
     "Replace: Adjective",
     "Replace: Noun Number",
-    "Sentence: Long",
+    "Sentence: Run-On",
     "Sentence: Unnecessary Words",
     "Sentence: Fragment",
     "Collocation: Suggestion"
