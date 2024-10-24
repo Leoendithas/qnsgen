@@ -180,7 +180,7 @@ def generate_questions_and_answers(prompt):
 # Function to regenerate selected questions
 def regenerate_questions(selected_questions):
     # Create a new prompt by concatenating selected questions
-    prompt = "Using the following questions and their answers as reference, generate new question and their suggested answers based on the number of questions indicated:\n\n" + "\n\n".join(selected_questions)
+    prompt = "Using the following questions and their answers as reference, generate new question and their suggested answers based on the number of questions provided:\n\n" + "\n\n".join(selected_questions)
     
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
@@ -322,11 +322,11 @@ def methodology_page():
 
     st.header("Problem Statement")
     st.write("""
-        Teachers can track student's errors using the new error tag tracking features, 
-        but might not have the resources to follow up on student's errors.
+        Teachers can track student's errors using the new error tracking feature, 
+        but they might not have the resources to follow up on student's errors.
     """)
     st.image("images/Error Tracking.svg", use_column_width=True)
-    st.caption("Teacher's error tag page which shows what the most common errors students face.")
+    st.caption("Teacher's error tracker page which shows what are the most common errors students face.")
     st.header("Proposed Solution")
     st.write("""
         Teachers can use the Question Generator to follow up on student's errors through generating
