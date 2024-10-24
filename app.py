@@ -333,16 +333,19 @@ def methodology_page():
 def home_page():
     st.title("Welcome to the Error Tag Question Generator!")
     st.write("""
-        This site is a part of the AI Champions Bootcamp.
-        This site mocks up a feature for the Singapore Student Learning Space.
-        When teachers have analysed their students' errors, they have to manually look for resources to follow up on their student's mistakes.
+        This site is a project for the AI Champions Bootcamp (2024).
+        
+        Assessment for learning is part and parcel of a teacher's life. After marking their students' work, teachers spend time analysing student's mistakes and identifying learning gaps to follow up on.
+        Thereafter, they have to look for resources to cover these learning gaps.
+        However, resources may be scarce or may not be well classified.
         The Question Generator seeks to smoothen this process by having an LLM generate follow-up questions based on the 'Error Tags' indicated on SLS.
         
-        Teachers can save the questions generated, or regenerate should they find the questions not suitable.
-        We hope this will help teachers to better close learning gaps.
+        Teachers can save the questions generated, or regenerate new ones should they find the questions not suitable.
+        We hope this will help teachers to better close learning gaps for their students.
         Enjoy!
 
-        - Lance & Addie
+        Best, 
+        Lance & Addie
     """)
 
 # Function to display the important notice
