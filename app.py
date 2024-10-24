@@ -332,7 +332,7 @@ def methodology_page():
 # Page: Home
 def home_page():
     st.title("Welcome!")
-    st.image("https://r2.flux1.ai/result-YVk9p5WuBq.png", width=600)
+    st.image("https://r2.flux1.ai/result-YVk9p5WuBq.png", width=400)
     st.write("""
         This site is a project for the AI Champions Bootcamp (2024).
     """)
