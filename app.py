@@ -338,6 +338,9 @@ def home_page():
             <img src="https://r2.flux1.ai/result-YVk9p5WuBq.png" alt="Centered Image" width="400">
             <p>This site is a project for the AI Champions Bootcamp (2024).</p>
         </div>
+        """,
+        unsafe_allow_html=True
+    )
     st.subheader("Context")
     st.write("""
         Assessment for learning is part and parcel of a teacher's life. After marking their students' work, teachers spend time analysing student's mistakes and identifying learning gaps to follow up on.
