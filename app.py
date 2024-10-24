@@ -179,7 +179,7 @@ def regenerate_questions(selected_questions):
     return generate_questions_and_answers(prompt)
 
 # Configure page layout
-st.set_page_config(page_title="Interactive Question Generator", layout="wide")
+st.set_page_config(page_title="Question Generator", layout="wide")
 
 # Define pages
 def generate_questions_page():
@@ -331,7 +331,8 @@ def methodology_page():
 
 # Page: Home
 def home_page():
-    st.title("Welcome to the Error Tag Question Generator!")
+    st.title("Welcome!")
+    st.image("https://r2.flux1.ai/result-YVk9p5WuBq.png", use_column_width=True)
     st.write("""
         This site is a project for the AI Champions Bootcamp (2024).
     """)
