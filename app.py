@@ -374,8 +374,8 @@ def display_important_notice():
             """)
 
             # Acknowledge button
-    if st.button("Acknowledge"):
-        st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
+        if st.button("Acknowledge"):
+            st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
 
 # Main function where the notice is displayed and other page logic is handled
 def main():
