@@ -252,10 +252,9 @@ def generate_questions_page():
         # Display generated questions with individual checkboxes
         selected_for_saving = []
         for i, qa in enumerate(st.session_state['questions_and_answers']):
-            # Create a single string that includes both the question and the answer
-            # Assuming the format of qa already has the question and answer together
-            combined_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
-            
+            # Combine question and answer into a single string with proper formatting
+            combined_qa = qa.replace('Q:', '**Question:**').replace('A:', '**Suggested Answer:**')
+
             # Display one checkbox for both the question and the answer
             if st.checkbox(combined_qa, key=f"qa_{i}"):
                 selected_for_saving.append(qa)
