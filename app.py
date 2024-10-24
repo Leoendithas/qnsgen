@@ -371,13 +371,15 @@ def display_important_notice():
 # Main function where the notice is displayed and other page logic is handled
 def main():
     st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Select a page:", ["Generate Questions", "View Saved Questions", "Methodology", "About Us"])
+    page = st.sidebar.radio("Select a page:", ["Home", "Generate Questions", "View Saved Questions", "Methodology", "About Us"])
 
     # Display the important notice only on the first visit (or until acknowledged)
     display_important_notice()
 
     # Page routing
-    if page == "Generate Questions":
+    if page == "Home":
+        home_page()
+    elif page == "Generate Questions":
         generate_questions_page()
     elif page == "View Saved Questions":
         view_saved_questions_page()
