@@ -173,7 +173,7 @@ def generate_questions_and_answers(prompt):
 # Function to regenerate selected questions
 def regenerate_questions(selected_questions):
     # Create a new prompt by concatenating selected questions
-    prompt = "Regenerate the following questions and their answers:\n\n" + "\n\n".join(selected_questions)
+    prompt = "Using the following questions and their answers as reference, generate new question and their suggested answers based on the number of questions indicated:\n\n" + "\n\n".join(selected_questions)
     
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
