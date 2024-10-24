@@ -315,11 +315,14 @@ def about_us_page():
 # Page: Methodology
 def methodology_page():
     st.title("Methodology")
+
     st.header("Problem Statement")
     st.write("""
-        Teachers can track student's errors using the new error tag features, 
+        Teachers can track student's errors using the new error tag tracking features, 
         but might not have the resources to follow up on student's errors.
     """)
+    st.image("images/Error Tag Screenshot.png", width = 400)
+    st.write("Teacher's error tag page which shows what the most common errors students face.")
     st.header("Proposed Solution")
     st.write("""
         Teachers can use the Question Generator to follow up on student's errors through generating
