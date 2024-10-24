@@ -1,6 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 
+# Configure page layout (once per page)
+st.set_page_config(page_title="Question Generator", layout="wide")
+
 #Font Initialisation
 with open( ".streamlit/style.css" ) as css:
     st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
@@ -181,9 +184,6 @@ def regenerate_questions(selected_questions):
     
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
-
-# Configure page layout
-st.set_page_config(page_title="Question Generator", layout="wide")
 
 # Define pages
 def generate_questions_page():
