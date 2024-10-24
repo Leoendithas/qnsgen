@@ -327,7 +327,7 @@ def methodology_page():
     st.write("""
         Teachers can use the Question Generator to follow up on student's errors through generating
         questions that specifically target the student's learning gaps. Teachers can save the questions generated, or
-        regenerate should they find the questions not suitable.
+        regenerate them should they find the questions not suitable.
 
         Thereafter, they can deploy the questions to students for practice and further assessment for learning.
     """)
