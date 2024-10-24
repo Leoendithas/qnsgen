@@ -356,8 +356,6 @@ def home_page():
         Lance & Addie
         """)
 
-import streamlit as st
-
 def display_important_notice():
     # Initialize the session state variable if it doesn't exist
     if 'notice_acknowledged' not in st.session_state:
