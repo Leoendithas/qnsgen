@@ -154,8 +154,10 @@ def get_learning_objectives(topic):
 
 # Function to generate a prompt based on subject, topic, and learning objective
 def create_prompt(subject, topic, learning_objective):
-    return f"""Generate five questions along with suggested answers for the subject '{subject}', 
-    skill '{topic}', and skill error that needs to be worked on: {learning_objective}.
+    return f"""You are a seasoned educator who specialises in helping students close their learning gaps.
+    Generate five questions along with suggested answers for the skill '{topic}' 
+    and skill error that needs to be worked on: '{learning_objective}'
+    The subject is '{subject}'.
     Return the questions and suggested answers in bolded headers.
     """
 
@@ -175,7 +177,11 @@ def generate_questions_and_answers(prompt):
 # Function to regenerate selected questions
 def regenerate_questions(selected_questions):
     # Create a new prompt by concatenating selected questions
-    prompt = "Using the following questions and their answers as reference, generate new question and their suggested answers based on the number of questions provided:\n\n" + "\n\n".join(selected_questions)
+    prompt = f"You are a seasoned educator who specialises in helping students close their learning gaps.
+    Using the following questions and their answers as reference, 
+    generate new questions and their suggested answers based on the number of questions 
+    provided:\n\n" + "\n\n".join(selected_questions)
+    
     
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
