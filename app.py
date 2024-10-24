@@ -343,7 +343,6 @@ def home_page():
         Teachers can save the questions generated, or regenerate new ones should they find the questions not suitable.
         
         **We hope this will help teachers to better close learning gaps for their students.**
-        Enjoy!
 
         Best, 
         Lance & Addie
