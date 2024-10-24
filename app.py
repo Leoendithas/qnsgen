@@ -335,13 +335,13 @@ def home_page():
     st.write("""
         This site is a project for the AI Champions Bootcamp (2024).
     """)
-    st.header("Context")
+    st.subheader("Context")
     st.write("""
         Assessment for learning is part and parcel of a teacher's life. After marking their students' work, teachers spend time analysing student's mistakes and identifying learning gaps to follow up on.
         Thereafter, they have to look for resources to cover these learning gaps.
         However, resources may be scarce or may not be well classified.
         """)
-    st.header("Proposed Solution")
+    st.subheader("Proposed Solution")
     st.write("""
         The Question Generator seeks to smoothen this process by having an LLM generate follow-up questions based on the 'Error Tags' indicated on SLS.
         These error tags are represented by the 'Skills' that need to be learnt, as well as the 'Skill Error' commonly committed by students for that concept.
@@ -374,8 +374,8 @@ def display_important_notice():
             """)
 
             # Acknowledge button
-            if st.button("Acknowledge"):
-                st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
+    if st.button("Acknowledge"):
+        st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
 
 # Main function where the notice is displayed and other page logic is handled
 def main():
