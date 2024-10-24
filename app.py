@@ -225,6 +225,9 @@ def generate_questions_page():
     # Generate button
     if st.button("Generate Questions"):
         if selected_subject and selected_topic and selected_learning_objective:
+            # Reset the regenerated questions when new questions are generated
+            st.session_state['regenerated_questions'] = []
+
             # Create the prompt
             prompt = create_prompt(selected_subject, selected_topic, selected_learning_objective)
 
