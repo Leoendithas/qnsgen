@@ -234,7 +234,7 @@ def generate_questions_page():
 
             # Format the response for better readability (New lines for question vs answer and bold headers)
             formatted_qas = []
-            qas_list = questions_and_answers.split("\n")
+            qas_list = questions_and_answers.split("\n\n\n")
             for i, qa in enumerate(qas_list):
                 # Insert new lines between question and answer and bold the headers
                 formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
