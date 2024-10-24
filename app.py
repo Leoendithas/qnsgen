@@ -355,28 +355,30 @@ def home_page():
         Best, 
         Lance & Addie
         """)
-# Function to display the important notice
+
 def display_important_notice():
-    # Display the notice only if the user hasn't acknowledged it
+    # Check if 'notice_acknowledged' exists in session_state, initialize it if not
     if 'notice_acknowledged' not in st.session_state:
         st.session_state['notice_acknowledged'] = False
     
     # If notice is not acknowledged, show the popup
     if not st.session_state['notice_acknowledged']:
-            st.info("""
-                **IMPORTANT NOTICE**: This web application is developed as a proof-of-concept prototype.
-                The information provided here is **NOT** intended for actual usage and should not be relied upon for making any decisions, 
-                especially those related to financial, legal, or healthcare matters.
+        st.info("""
+            **IMPORTANT NOTICE**: This web application is developed as a proof-of-concept prototype.
+            The information provided here is **NOT** intended for actual usage and should not be relied upon for making any decisions, 
+            especially those related to financial, legal, or healthcare matters.
 
-                Furthermore, please be aware that the LLM may generate inaccurate or incorrect information.
-                You assume full responsibility for how you use any generated output.
+            Furthermore, please be aware that the LLM may generate inaccurate or incorrect information.
+            You assume full responsibility for how you use any generated output.
 
-                Always consult with qualified professionals for accurate and personalized advice.
-            """)
+            Always consult with qualified professionals for accurate and personalized advice.
+        """)
 
-            # Acknowledge button
-            if st.button("Acknowledge"):
-                st.session_state['notice_acknowledged'] = True  # Set the session state to True to not show the message again
+        # Acknowledge button
+        if st.button("Acknowledge"):
+            # Immediately set the session state to True and trigger a rerun
+            st.session_state['notice_acknowledged'] = True
+            st.experimental_rerun()  # Rerun the script to reflect changes immediately
 
 # Main function where the notice is displayed and other page logic is handled
 def main():
