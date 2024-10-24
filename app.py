@@ -357,11 +357,11 @@ def home_page():
         """)
 
 def display_important_notice():
-    # Check if 'notice_acknowledged' exists in session_state, initialize it if not
+    # Initialize the session state if 'notice_acknowledged' is not present
     if 'notice_acknowledged' not in st.session_state:
         st.session_state['notice_acknowledged'] = False
     
-    # If notice is not acknowledged, show the popup
+    # Only display the notice if it hasn't been acknowledged yet
     if not st.session_state['notice_acknowledged']:
         st.info("""
             **IMPORTANT NOTICE**: This web application is developed as a proof-of-concept prototype.
@@ -374,11 +374,12 @@ def display_important_notice():
             Always consult with qualified professionals for accurate and personalized advice.
         """)
 
-        # Acknowledge button
+        # If the button is clicked, set the notice as acknowledged
         if st.button("Acknowledge"):
-            # Immediately set the session state to True and trigger a rerun
             st.session_state['notice_acknowledged'] = True
-            st.experimental_rerun()  # Rerun the script to reflect changes immediately
+
+    # No need to rerun manually; Streamlit will automatically handle the rerun
+
 
 # Main function where the notice is displayed and other page logic is handled
 def main():
