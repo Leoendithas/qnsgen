@@ -164,7 +164,7 @@ def create_prompt(subject, topic, learning_objective):
 # Function to call OpenAI API to generate questions and answers
 def generate_questions_and_answers(prompt):
     response = client.chat.completions.create(
-        model="gpt-4",  # Use GPT-4 if available
+        model="gpt-4o",  
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
