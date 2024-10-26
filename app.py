@@ -1,8 +1,109 @@
 import streamlit as st
 from openai import OpenAI
 
+import time
+from streamlit import session_state as state
+
+import sqlite3
+import hashlib
+
 # Configure page layout (once per page)
 st.set_page_config(page_title="Question Generator", layout="wide")
+
+# Function to hash passwords
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Database connection and user-related functions
+def create_user_table():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)')
+    conn.commit()
+
+def add_user(username, password):
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO users(username, password) VALUES (?,?)', (username, hash_password(password)))
+    conn.commit()
+
+def login_user(username, password):
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, hash_password(password)))
+    data = c.fetchone()
+    return data
+
+# Functions for managing saved questions
+def create_questions_table():
+    conn = sqlite3.connect('questions.db')
+    c = conn.cursor()
+    c.execute('CREATE TABLE IF NOT EXISTS questions(username TEXT, question TEXT, answer TEXT)')
+    conn.commit()
+
+def save_question(username, question, answer):
+    conn = sqlite3.connect('questions.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO questions(username, question, answer) VALUES (?,?,?)', (username, question, answer))
+    conn.commit()
+
+def get_saved_questions(username):
+    conn = sqlite3.connect('questions.db')
+    c = conn.cursor()
+    c.execute('SELECT question, answer FROM questions WHERE username = ?', (username,))
+    data = c.fetchall()
+    return data
+
+# Define the important notice display function
+def display_important_notice():
+    if 'notice_acknowledged' not in st.session_state:
+        st.session_state['notice_acknowledged'] = False
+    
+    if not st.session_state['notice_acknowledged']:
+        st.info("""
+            **IMPORTANT NOTICE**: This web application is developed as a proof-of-concept prototype.
+            The information provided here is **NOT** intended for actual usage and should not be relied upon for making any decisions, 
+            especially those related to financial, legal, or healthcare matters.
+
+            Furthermore, please be aware that the LLM may generate inaccurate or incorrect information.
+            You assume full responsibility for how you use any generated output.
+
+            Always consult with qualified professionals for accurate and personalized advice.
+        """)
+
+        if st.button("Acknowledge"):
+            st.session_state['notice_acknowledged'] = True
+
+# Main function where the notice is displayed and other page logic is handled
+def main():
+    # Initialize session state for login
+    if 'logged_in' not in st.session_state:
+        st.session_state['logged_in'] = False
+    if 'username' not in st.session_state:
+        st.session_state['username'] = ""
+
+    # Always show the sidebar
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Select a page:", ["Generate Questions", "View Saved Questions", "Methodology", "About Us"])
+
+    # Display the important notice only after the user logs in
+    display_important_notice()
+
+    # Page routing
+    if page == "Home":
+        home_page()
+    elif page == "Generate Questions":
+        generate_questions_page()  # Show login/register tabs on this page
+    elif page == "View Saved Questions":
+        if st.session_state['logged_in']:
+            view_saved_questions_page()  # Only accessible if logged in
+        else:
+            st.warning("Please login to view saved questions.")
+    elif page == "About Us":
+        about_us_page()
+    elif page == "Methodology":
+        methodology_page()
+
 
 #Font Initialisation
 with open( ".streamlit/style.css" ) as css:
@@ -308,6 +409,7 @@ def generate_questions_page():
             st.session_state['saved_questions'].extend(selected_for_saving_regenerated)
             st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s) and answer(s)!")
 
+
 def view_saved_questions_page():
     st.title("View Saved Questions")
     if 'saved_questions' in st.session_state and st.session_state['saved_questions']:
@@ -377,8 +479,6 @@ def home_page():
         Lance & Addie
         """)
 
-import streamlit as st
-
 def display_important_notice():
     # Initialize the session state if 'notice_acknowledged' is not present
     if 'notice_acknowledged' not in st.session_state:
@@ -402,26 +502,6 @@ def display_important_notice():
             st.session_state['notice_acknowledged'] = True
 
     # No need to rerun manually; Streamlit will automatically handle the rerun
-
-# Main function where the notice is displayed and other page logic is handled
-def main():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Select a page:", ["Home", "Generate Questions", "View Saved Questions", "Methodology", "About Us"])
-
-    # Display the important notice only on the first visit (or until acknowledged)
-    display_important_notice()
-
-    # Page routing
-    if page == "Home":
-        home_page()
-    elif page == "Generate Questions":
-        generate_questions_page()
-    elif page == "View Saved Questions":
-        view_saved_questions_page()
-    elif page == "About Us":
-        about_us_page()
-    elif page == "Methodology":
-        methodology_page()
 
 if __name__ == "__main__":
     main()
