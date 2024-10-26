@@ -1,2 +1,2 @@
 openai
-pymango
+pymango==4.2.0
