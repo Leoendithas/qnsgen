@@ -84,7 +84,7 @@ def main():
 
     # Always show the sidebar
     st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Select a page:", ["Generate Questions", "View Saved Questions", "Methodology", "About Us"])
+    page = st.sidebar.radio("Select a page:", ["Home", "Generate Questions", "View Saved Questions", "Methodology", "About Us"])
 
     # Display the important notice only after the user logs in
     display_important_notice()
