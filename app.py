@@ -54,6 +54,38 @@ def get_saved_questions(username):
     data = c.fetchall()
     return data
 
+# Function for login and registration tabs
+def login_or_register():
+    st.subheader("Login or Register to access the Generate Questions page")
+    
+    # Using tabs for Login and Register
+    tabs = st.tabs(["Login", "Register"])
+    
+    # Login Tab
+    with tabs[0]:
+        st.subheader("Login")
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+
+        if st.button("Login"):
+            if login_user(username, password):
+                st.session_state['logged_in'] = True
+                st.success(f"Welcome {username}!")
+                st.rerun()
+            else:
+                st.error("Incorrect username or password")
+
+    # Register Tab
+    with tabs[1]:
+        st.subheader("Register")
+        new_username = st.text_input("New Username", key="register_username")
+        new_password = st.text_input("New Password", type="password", key="register_password")
+
+        if st.button("Register"):
+            add_user(new_username, new_password)
+            st.success(f"Account created for {new_username}! Please log in.")
+            st.experimental_rerun()
+
 # Define the important notice display function
 def display_important_notice():
     if 'notice_acknowledged' not in st.session_state:
@@ -294,120 +326,123 @@ def regenerate_questions(selected_questions):
 
 # Define pages
 def generate_questions_page():
-    st.title("Generate Questions")
+    if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
+        login()  # Show login page if not logged in
+    else:
+        st.title("Generate Questions")
 
-    # Subject dropdown 
-    subjects = [
-        "Mathematics", "English"
-    ]
-    
-    # Subject selection
-    selected_subject = st.selectbox("Choose a subject:", subjects)
+        # Subject dropdown 
+        subjects = [
+            "Mathematics", "English"
+        ]
+        
+        # Subject selection
+        selected_subject = st.selectbox("Choose a subject:", subjects)
 
-    # Fetch the relevant topics based on selected subject
-    topics = get_topics(selected_subject)
+        # Fetch the relevant topics based on selected subject
+        topics = get_topics(selected_subject)
 
-    # Topic selection dropdown (renamed from Learning Objective)
-    selected_topic = st.selectbox("Choose a skill:", topics)
+        # Topic selection dropdown (renamed from Learning Objective)
+        selected_topic = st.selectbox("Choose a skill:", topics)
 
-    # Fetch the relevant learning objectives based on selected topic
-    learning_objectives = get_learning_objectives(selected_topic)
+        # Fetch the relevant learning objectives based on selected topic
+        learning_objectives = get_learning_objectives(selected_topic)
 
-    # Learning Objective selection dropdown (new dropdown)
-    selected_learning_objective = st.selectbox("Choose a skill error:", learning_objectives)
+        # Learning Objective selection dropdown (new dropdown)
+        selected_learning_objective = st.selectbox("Choose a skill error:", learning_objectives)
 
-    # Store generated and regenerated questions in session state to persist them across interactions
-    if 'questions_and_answers' not in st.session_state:
-        st.session_state['questions_and_answers'] = []
+        # Store generated and regenerated questions in session state to persist them across interactions
+        if 'questions_and_answers' not in st.session_state:
+            st.session_state['questions_and_answers'] = []
 
-    if 'regenerated_questions' not in st.session_state:
-        st.session_state['regenerated_questions'] = []
-
-    # Generate button
-    if st.button("Generate Questions"):
-        if selected_subject and selected_topic and selected_learning_objective:
-            # Reset the regenerated questions when new questions are generated
+        if 'regenerated_questions' not in st.session_state:
             st.session_state['regenerated_questions'] = []
 
-            # Create the prompt
-            prompt = create_prompt(selected_subject, selected_topic, selected_learning_objective)
+        # Generate button
+        if st.button("Generate Questions"):
+            if selected_subject and selected_topic and selected_learning_objective:
+                # Reset the regenerated questions when new questions are generated
+                st.session_state['regenerated_questions'] = []
 
-            # Generate questions and answers
-            with st.spinner("Generating questions and answers..."):
-                questions_and_answers = generate_questions_and_answers(prompt)
+                # Create the prompt
+                prompt = create_prompt(selected_subject, selected_topic, selected_learning_objective)
 
-            # Format the response for better readability (New lines for question vs answer and bold headers)
-            formatted_qas = []
-            qas_list = questions_and_answers.split("\n\n")
-            for i, qa in enumerate(qas_list):
-                # Insert new lines between question and answer and bold the headers
-                formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
-                formatted_qas.append(formatted_qa)
+                # Generate questions and answers
+                with st.spinner("Generating questions and answers..."):
+                    questions_and_answers = generate_questions_and_answers(prompt)
 
-            # Store the formatted questions and answers in session state
-            st.session_state['questions_and_answers'] = formatted_qas
+                # Format the response for better readability (New lines for question vs answer and bold headers)
+                formatted_qas = []
+                qas_list = questions_and_answers.split("\n\n")
+                for i, qa in enumerate(qas_list):
+                    # Insert new lines between question and answer and bold the headers
+                    formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
+                    formatted_qas.append(formatted_qa)
 
-    # Only display the questions and answers after they are generated
-    if st.session_state['questions_and_answers']:
-        st.subheader("Generated Questions and Suggested Answers")
+                # Store the formatted questions and answers in session state
+                st.session_state['questions_and_answers'] = formatted_qas
 
-        # "Select All" checkbox for generated questions
-        select_all = st.toggle("Select All Generated Questions")
+        # Only display the questions and answers after they are generated
+        if st.session_state['questions_and_answers']:
+            st.subheader("Generated Questions and Suggested Answers")
 
-        # Display generated questions with individual checkboxes
-        selected_for_saving = []
-        for i, qa in enumerate(st.session_state['questions_and_answers']):
-            if select_all:
-                selected_for_saving.append(qa)
-                st.checkbox(qa, value=True, key=f"qa_{i}", disabled=True)  # Keep the actual generated QA text
-            else:
-                if st.checkbox(qa, key=f"qa_{i}"):
+            # "Select All" checkbox for generated questions
+            select_all = st.toggle("Select All Generated Questions")
+
+            # Display generated questions with individual checkboxes
+            selected_for_saving = []
+            for i, qa in enumerate(st.session_state['questions_and_answers']):
+                if select_all:
                     selected_for_saving.append(qa)
-        
-        # Show Save and Regenerate buttons even if no checkboxes are selected
-        col1, col2 = st.columns(2)
+                    st.checkbox(qa, value=True, key=f"qa_{i}", disabled=True)  # Keep the actual generated QA text
+                else:
+                    if st.checkbox(qa, key=f"qa_{i}"):
+                        selected_for_saving.append(qa)
+            
+            # Show Save and Regenerate buttons even if no checkboxes are selected
+            col1, col2 = st.columns(2)
 
-        with col1:
-            # Save button
-            if st.button("Save Selected Questions"):
+            with col1:
+                # Save button
+                if st.button("Save Selected Questions"):
+                    if 'saved_questions' not in st.session_state:
+                        st.session_state['saved_questions'] = []
+                    st.session_state['saved_questions'].extend(selected_for_saving)
+                    st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
+
+            with col2:
+                # Regenerate button
+                if st.button("Regenerate Selected Questions"):
+                    if selected_for_saving:
+                        with st.spinner("Regenerating selected questions..."):
+                            regenerated_questions = regenerate_questions(selected_for_saving)
+                        
+                        # Format the regenerated questions and store them in session state
+                        formatted_regenerated_qas = []
+                        qas_list = regenerated_questions.split("\n\n")
+                        for i, qa in enumerate(qas_list):
+                            formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
+                            formatted_regenerated_qas.append(formatted_qa)
+
+                        # Store regenerated questions in session state
+                        st.session_state['regenerated_questions'] = formatted_regenerated_qas
+
+        # Display regenerated questions if available
+        if st.session_state['regenerated_questions']:
+            st.subheader("Regenerated Questions and Suggested Answers")
+            
+            # Use checkboxes for regenerated questions
+            selected_for_saving_regenerated = []
+            for i, qa in enumerate(st.session_state['regenerated_questions']):
+                if st.checkbox(qa, key=f"regenerated_qa_{i}"):
+                    selected_for_saving_regenerated.append(qa)
+
+            # Save regenerated questions
+            if st.button("Save Regenerated Questions"):
                 if 'saved_questions' not in st.session_state:
                     st.session_state['saved_questions'] = []
-                st.session_state['saved_questions'].extend(selected_for_saving)
-                st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
-
-        with col2:
-            # Regenerate button
-            if st.button("Regenerate Selected Questions"):
-                if selected_for_saving:
-                    with st.spinner("Regenerating selected questions..."):
-                        regenerated_questions = regenerate_questions(selected_for_saving)
-                    
-                    # Format the regenerated questions and store them in session state
-                    formatted_regenerated_qas = []
-                    qas_list = regenerated_questions.split("\n\n")
-                    for i, qa in enumerate(qas_list):
-                        formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
-                        formatted_regenerated_qas.append(formatted_qa)
-
-                    # Store regenerated questions in session state
-                    st.session_state['regenerated_questions'] = formatted_regenerated_qas
-
-    # Display regenerated questions if available
-    if st.session_state['regenerated_questions']:
-        st.subheader("Regenerated Questions and Suggested Answers")
-        
-        # Use checkboxes for regenerated questions
-        selected_for_saving_regenerated = []
-        for i, qa in enumerate(st.session_state['regenerated_questions']):
-            if st.checkbox(qa, key=f"regenerated_qa_{i}"):
-                selected_for_saving_regenerated.append(qa)
-
-        # Save regenerated questions
-        if st.button("Save Regenerated Questions"):
-            if 'saved_questions' not in st.session_state:
-                st.session_state['saved_questions'] = []
-            st.session_state['saved_questions'].extend(selected_for_saving_regenerated)
-            st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s) and answer(s)!")
+                st.session_state['saved_questions'].extend(selected_for_saving_regenerated)
+                st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s) and answer(s)!")
 
 
 def view_saved_questions_page():
