@@ -327,7 +327,7 @@ def regenerate_questions(selected_questions):
 # Define pages
 def generate_questions_page():
     if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
-        login()  # Show login page if not logged in
+        login_or_register()  # Show login page if not logged in
     else:
         st.title("Generate Questions")
 
