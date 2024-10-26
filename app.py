@@ -4,6 +4,7 @@ from openai import OpenAI
 import time
 from streamlit import session_state as state
 
+import pymongo
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 import hashlib
