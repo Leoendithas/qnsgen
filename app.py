@@ -4,35 +4,41 @@ from openai import OpenAI
 import time
 from streamlit import session_state as state
 
-import sqlite3
+from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 import hashlib
 
 # Configure page layout (once per page)
 st.set_page_config(page_title="Question Generator", layout="wide")
 
+# MongoDB connection
+client = MongoClient(st.secrets["mongodb"]["URI"])
+db = client[st.secrets["mongodb"]["QnsGenUserPW"]]
+users_collection = db["users"]
+
+users_collection.create_index("username", unique=True)
+
 # Function to hash passwords
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-# Database connection and user-related functions
-def create_user_table():
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT)')
-    conn.commit()
-
 def add_user(username, password):
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO users(username, password) VALUES (?,?)', (username, hash_password(password)))
-    conn.commit()
+    # Check if the user already exists
+    if users_collection.find_one({"username": username}):
+        return False  # User already exists
+    
+    # Insert a new user
+    user_data = {
+        "username": username,
+        "password": hash_password(password)
+    }
+    users_collection.insert_one(user_data)
+    return True
 
+# Function to log in a user
 def login_user(username, password):
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, hash_password(password)))
-    data = c.fetchone()
-    return data
+    user = users_collection.find_one({"username": username, "password": hash_password(password)})
+    return user is not None
 
 # Functions for managing saved questions
 def create_questions_table():
@@ -67,13 +73,15 @@ def login_or_register():
         username = st.text_input("Username", key="login_username")
         password = st.text_input("Password", type="password", key="login_password")
 
+        # Login the user
         if st.button("Login"):
             if login_user(username, password):
                 st.session_state['logged_in'] = True
                 st.success(f"Welcome {username}!")
-                st.rerun()
+                st.rerun()  # Move to the next step after logging in
             else:
                 st.error("Incorrect username or password")
+
 
     # Register Tab
     with tabs[1]:
@@ -81,10 +89,13 @@ def login_or_register():
         new_username = st.text_input("New Username", key="register_username")
         new_password = st.text_input("New Password", type="password", key="register_password")
 
+        # Register a new user
         if st.button("Register"):
-            add_user(new_username, new_password)
-            st.success(f"Account created for {new_username}! Please log in.")
-            st.experimental_rerun()
+            if add_user(username, password):
+                st.success("Registration successful!")
+            else:
+                st.error("User already exists. Please try a different username.")
+
 
 # Define the important notice display function
 def display_important_notice():
