@@ -13,7 +13,7 @@ st.set_page_config(page_title="Question Generator", layout="wide")
 
 # MongoDB connection
 client = MongoClient(st.secrets["mongodb"]["URI"])
-db = client[st.secrets["mongodb"]["QnsGenUserPW"]]
+db = client[st.secrets["mongodb"]["DATABASE_NAME"]]
 users_collection = db["users"]
 
 users_collection.create_index("username", unique=True)
