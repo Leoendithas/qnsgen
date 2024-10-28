@@ -328,19 +328,23 @@ def methodology_page():
 
     st.header("Problem Statement")
     st.write("""
-        Teachers can track student's errors using the new error tracking feature, 
-        but they might not have the resources to follow up on student's errors.
-    """)
+        In the current educational landscape, students often receive feedback on their assignments, but this feedback can lack specificity and relevance to their individual mistakes. As a result, many students struggle to consolidate their learning and apply corrections in future assessments. This disconnect not only hinders their academic progress but also leads to increased frustration and disengagement with the learning process. Teachers, too, face challenges; without clear insights into recurring errors, they cannot effectively tailor their interventions or provide targeted support to address individual student needs. The magnitude of this problem is significant, as it affects a large number of students who may repeatedly make the same mistakes without a clear understanding of how to improve. This can result in wasted time and resources, both for the students and for educators who spend hours providing general feedback that does not translate into measurable improvement.    
+        """)
     st.image("images/Error Tracking.svg", use_column_width=True)
     st.caption("Teacher's error tracker page which shows what are the most common errors students face.")
     st.header("Proposed Solution")
     st.write("""
-        Teachers can use the Question Generator to follow up on student's errors through generating
-        questions that specifically target the student's learning gaps. Teachers can save the questions generated, or
-        regenerate them should they find the questions not suitable.
-
-        Thereafter, they can deploy the questions to students for practice and further assessment for learning.
+To address the challenge of helping students learn from their recurring mistakes, we propose utilizing Large Language Models (LLMs) as a transformative catalyst in the educational process. Much like enzymes that lower activation energy, LLMs can automate the generation of personalized questions based on error tags and past responses, significantly reducing the effort required from educators. By leveraging Retrieval-Augmented Generation (RAG), the model can efficiently pull relevant information and context, allowing it to craft targeted questions that directly address each student's unique challenges. This automation not only streamlines the feedback process but also ensures that students receive immediate, relevant practice opportunities, reinforcing their understanding of key concepts. In addition to lowering the activation energy for learning, the solution promotes the reuse of feedback mechanisms. By establishing a consistent user flow that encourages students to engage with feedback repeatedly, we can foster a habit of reflective learning. Teachers benefit from minimal costs and effort since they are not burdened with the task of creating highly personalized questions. Instead, the LLM can serve as an initial resource, providing a first draft of tailored questions that educators can easily edit.
     """)
+    st.header("Impact")
+    st.write("""
+After implementing the solution, we anticipate noticeable improvements in how students engage with their feedback, leading to a better understanding of key concepts. The system will be used regularly, encouraging students to practice and learn from their mistakes in a manageable way. From an agency or whole-of-government perspective, this approach could save teachers several hours each week on feedback-related tasks, resulting in a meaningful reduction in workload over the year. This streamlined process offers a practical and achievable enhancement to current practices, allowing for more focus on direct student support without making unrealistic promises.    
+    """)
+    st.header("Project Sponsors & Users")
+    st.write("""
+This project’s potential impact is significant enough as it aligns with the ongoing efforts to enhance educational outcomes through technology. The integration of the LLM into the existing Student Learning Space (SLS) Feedback Assistant can drive substantial improvements in personalized learning and feedback efficiency, key priorities for educational leadership. The primary users of the LLM applications will be both students and teachers utilizing the SLS platform. Students will benefit directly by receiving targeted questions that help them address their recurring mistakes, while teachers will gain insights into common errors across their classes, enabling them to tailor their interventions effectively. In the long run, the solution has the potential to benefit thousands of users in Singapore, as the SLS is widely adopted among teachers and students, creating a collaborative environment where personalized learning can thrive.    
+    """)
+
 
 # Page: Home
 def home_page():
