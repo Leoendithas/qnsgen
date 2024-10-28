@@ -464,22 +464,37 @@ def generate_questions_page():
                 else:
                     if st.checkbox(qa, key=f"qa_{i}"):
                         selected_for_saving.append(qa)
-            
+
             # Show Save and Regenerate buttons even if no checkboxes are selected
             col1, col2 = st.columns(2)
 
+            # Save button
             with col1:
-                # Save button
                 if st.button("Save Selected Questions"):
                     if selected_for_saving:  # Ensure there are selected questions to save
                         for qa in selected_for_saving:
-                            # Save each question to the MongoDB database
-                            question_text = qa.split("\n")[1]  # Extract the question part
-                            answer_text = qa.split("\n")[3]    # Extract the answer part
-                            save_question(st.session_state['username'], question_text, answer_text)
-                        st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
+                            # Extract question and answer by splitting the text
+                            question_text = ""
+                            answer_text = ""
+                            
+                            # Look for "Question" and "Answer" sections
+                            lines = qa.split("\n")
+                            for line in lines:
+                                if line.startswith("**Question:**"):
+                                    question_text = line.replace("**Question:**", "").strip()
+                                elif line.startswith("**Suggested Answer:**"):
+                                    answer_text = line.replace("**Suggested Answer:**", "").strip()
+
+                            # Check if both question and answer are found before saving
+                            if question_text and answer_text:
+                                save_question(st.session_state['username'], question_text, answer_text)
+                            else:
+                                st.error("Could not parse the question or answer from the generated content.")
+
+                        st.success(f"Saved {len(selected_for_saving)} question(s) to your account!")
                     else:
-                        st.warning("No questions selected to save.")                    
+                        st.warning("No questions selected to save.")
+                 
 
             with col2:
                 # Regenerate button
