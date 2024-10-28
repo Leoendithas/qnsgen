@@ -1,9 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 
-
 import time
 from streamlit import session_state as state
+import re
 
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
@@ -475,12 +475,15 @@ def generate_questions_page():
                         successfully_saved = 0
                         failed_to_parse = 0
 
+                        # Regular expression to capture the question and answer
+                        qa_pattern = r"\*\*Question:\*\*(.*?)\*\*Suggested Answer:\*\*(.*)"
+
                         for qa in selected_for_saving:
-                            # Split the QA pair based on known delimiters for question and answer
-                            try:
-                                question_part, answer_part = qa.split("**Suggested Answer:**")
-                                question_text = question_part.replace("**Question:**", "").strip()
-                                answer_text = answer_part.strip()
+                            # Try to extract question and answer using regex
+                            match = re.search(qa_pattern, qa, re.DOTALL)
+                            if match:
+                                question_text = match.group(1).strip()
+                                answer_text = match.group(2).strip()
 
                                 if question_text and answer_text:
                                     # Save question and answer to the database
@@ -488,9 +491,8 @@ def generate_questions_page():
                                     successfully_saved += 1
                                 else:
                                     failed_to_parse += 1
-
-                            except ValueError:
-                                # If we couldn't split the QA pair, count it as a parse failure
+                            else:
+                                # If no match found, count it as a parse failure
                                 failed_to_parse += 1
 
                         if successfully_saved > 0:
