@@ -40,29 +40,56 @@ def login_user(username, password):
     user = users_collection.find_one({"username": username, "password": hash_password(password)})
     return user is not None
 
-# Functions for managing saved questions
-def create_questions_table():
-    conn = sqlite3.connect('questions.db')
-    c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS questions(username TEXT, question TEXT, answer TEXT)')
-    conn.commit()
-
 def username_exists(username):
     return users_collection.find_one({"username": username}) is not None
 
-
 def save_question(username, question, answer):
-    conn = sqlite3.connect('questions.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO questions(username, question, answer) VALUES (?,?,?)', (username, question, answer))
-    conn.commit()
+    question_data = {
+        "username": username,
+        "question": question,
+        "answer": answer
+    }
+    users_collection.insert_one(question_data)
 
 def get_saved_questions(username):
-    conn = sqlite3.connect('questions.db')
-    c = conn.cursor()
-    c.execute('SELECT question, answer FROM questions WHERE username = ?', (username,))
-    data = c.fetchall()
-    return data
+    return list(users_collection.find({"username": username}, {"_id": 1, "question": 1, "answer": 1}))
+
+def delete_selected_questions(question_ids):
+    for question_id in question_ids:
+        users_collection.delete_one({"_id": question_id})
+
+def view_saved_questions_page():
+    if 'username' not in st.session_state or not st.session_state['logged_in']:
+        st.warning("Please log in to view your saved questions.")
+        return
+    
+    username = st.session_state['username']
+    saved_questions = get_saved_questions(username)
+    
+    if not saved_questions:
+        st.info("You have no saved questions.")
+        return
+
+    st.subheader(f"Saved Questions for {username}")
+
+    # List of selected question IDs for deletion
+    selected_questions = []
+    
+    # Display each question with a checkbox
+    for question in saved_questions:
+        question_id = question["_id"]
+        if st.checkbox(f"**Q:** {question['question']}\n**A:** {question['answer']}", key=f"sq_{question_id}"):
+            selected_questions.append(question_id)
+
+    # Delete button to remove selected questions
+    if st.button("Delete Selected Questions"):
+        if selected_questions:
+            delete_selected_questions(selected_questions)
+            st.success("Selected questions have been deleted.")
+            st.rerun()  # Reload the page to reflect the changes
+        else:
+            st.warning("Please select at least one question to delete.")
+
 
 # Function for login and registration tabs
 def login_or_register():
