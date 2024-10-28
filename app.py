@@ -478,8 +478,8 @@ def generate_questions_page():
                             answer_text = qa.split("\n")[3]    # Extract the answer part
                             save_question(st.session_state['username'], question_text, answer_text)
                         st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
-                        else:
-                            st.warning("No questions selected to save.")                    
+                    else:
+                        st.warning("No questions selected to save.")                    
 
             with col2:
                 # Regenerate button
