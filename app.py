@@ -406,6 +406,26 @@ def regenerate_questions(selected_questions):
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
 
+def parse_generated_questions(questions_and_answers):
+    try:
+        qas_list = questions_and_answers.split("\n\n")
+        parsed_qas = []
+        for qa in qas_list:
+            if "**Question:**" in qa and "**Suggested Answer:**" in qa:
+                question_part = qa.split("**Question:**")[1].split("**Suggested Answer:**")[0].strip()
+                answer_part = qa.split("**Suggested Answer:**")[1].strip()
+                parsed_qas.append({
+                    "question": question_part,
+                    "answer": answer_part
+                })
+            else:
+                st.error("Could not parse the question or answer from the generated content.")
+        return parsed_qas
+    except Exception as e:
+        st.error(f"An error occurred during parsing: {str(e)}")
+        return []
+
+
 # Define pages
 def generate_questions_page():
     if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
