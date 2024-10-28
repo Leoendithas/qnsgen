@@ -47,6 +47,10 @@ def create_questions_table():
     c.execute('CREATE TABLE IF NOT EXISTS questions(username TEXT, question TEXT, answer TEXT)')
     conn.commit()
 
+def username_exists(username):
+    return users_collection.find_one({"username": username}) is not None
+
+
 def save_question(username, question, answer):
     conn = sqlite3.connect('questions.db')
     c = conn.cursor()
