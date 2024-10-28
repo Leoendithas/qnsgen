@@ -20,6 +20,7 @@ users_collection = db["users"]
 questions_collection = db["questions"]  # Stores questions
 
 users_collection.create_index("username", unique=True)
+questions_collection.create_index("username")
 
 # Function to hash passwords
 def hash_password(password):
@@ -52,7 +53,15 @@ def save_question(username, question, answer):
         "question": question,
         "answer": answer
     }
+    st.write(f"Saving question: {question_data}")  # Add this line to log the question being saved
     questions_collection.insert_one(question_data)
+    try:
+        questions_collection.insert_one(question_data)
+        st.write("Question saved successfully")  # Log success
+    except Exception as e:
+        st.error(f"Error saving question: {e}")  # Log the error if the insertion fails
+
+
 
 def get_saved_questions(username):
     return list(questions_collection.find({"username": username}, {"_id": 1, "question": 1, "answer": 1}))
