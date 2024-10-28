@@ -53,15 +53,7 @@ def save_question(username, question, answer):
         "question": question,
         "answer": answer
     }
-    st.write(f"Saving question: {question_data}")  # Add this line to log the question being saved
     questions_collection.insert_one(question_data)
-    try:
-        questions_collection.insert_one(question_data)
-        st.write("Question saved successfully")  # Log success
-    except Exception as e:
-        st.error(f"Error saving question: {e}")  # Log the error if the insertion fails
-
-
 
 def get_saved_questions(username):
     return list(questions_collection.find({"username": username}, {"_id": 1, "question": 1, "answer": 1}))
@@ -479,10 +471,15 @@ def generate_questions_page():
             with col1:
                 # Save button
                 if st.button("Save Selected Questions"):
-                    if 'saved_questions' not in st.session_state:
-                        st.session_state['saved_questions'] = []
-                    st.session_state['saved_questions'].extend(selected_for_saving)
-                    st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
+                    if selected_for_saving:  # Ensure there are selected questions to save
+                        for qa in selected_for_saving:
+                            # Save each question to the MongoDB database
+                            question_text = qa.split("\n")[1]  # Extract the question part
+                            answer_text = qa.split("\n")[3]    # Extract the answer part
+                            save_question(st.session_state['username'], question_text, answer_text)
+                        st.success(f"Saved {len(selected_for_saving)} question(s) and answer(s)!")
+                        else:
+                            st.warning("No questions selected to save.")                    
 
             with col2:
                 # Regenerate button
