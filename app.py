@@ -81,9 +81,18 @@ def view_saved_questions_page():
     
     # Display each question with a checkbox
     for question in saved_questions:
-        question_id = str(question["_id"])  # Ensure the question ID is a string
-        if st.checkbox(f"**Q:** {question['question']}\n**A:** {question['answer']}", key=f"sq_{question_id}"):
-            selected_questions.append(question_id)
+        question_id = question["_id"]
+        try:
+            # Safely access question and answer fields
+            q_text = question.get('question', 'No question found')
+            a_text = question.get('answer', 'No answer found')
+            
+            # Show the question and answer with checkbox
+            if st.checkbox(f"**Q:** {q_text}\n**A:** {a_text}", key=f"sq_{question_id}"):
+                selected_questions.append(question_id)
+        except KeyError:
+            st.error("An error occurred while displaying the questions.")
+            continue
 
     # Delete button to remove selected questions
     if st.button("Delete Selected Questions"):
@@ -93,6 +102,7 @@ def view_saved_questions_page():
             st.rerun()  # Reload the page to reflect the changes
         else:
             st.warning("Please select at least one question to delete.")
+
 
 
 # Function for login and registration tabs
