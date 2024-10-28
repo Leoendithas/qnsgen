@@ -457,8 +457,6 @@ def generate_questions_page():
 
             # Display generated questions with individual checkboxes
             selected_for_saving = []
-            # Display generated questions with individual checkboxes
-            selected_for_saving = []
             for i, qa in enumerate(st.session_state['questions_and_answers']):
                 if select_all:
                     selected_for_saving.append(qa)
