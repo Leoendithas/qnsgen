@@ -74,32 +74,41 @@ def login_or_register():
     # Login Tab
     with tabs[0]:
         st.subheader("Login")
-        username = st.text_input("Username", key="login_username")
-        password = st.text_input("Password", type="password", key="login_password")
+        username = st.text_input("Username", key="login_username").strip()
+        password = st.text_input("Password", type="password", key="login_password").strip()
 
         # Login the user
         if st.button("Login"):
             if login_user(username, password):
                 st.session_state['logged_in'] = True
+                st.session_state['username'] = username
                 st.success(f"Welcome {username}!")
                 st.rerun()  # Move to the next step after logging in
             else:
                 st.error("Incorrect username or password")
 
-
     # Register Tab
     with tabs[1]:
         st.subheader("Register")
-        new_username = st.text_input("New Username", key="register_username")
-        new_password = st.text_input("New Password", type="password", key="register_password")
+        new_username = st.text_input("New Username", key="register_username").strip()
+        new_password = st.text_input("New Password", type="password", key="register_password").strip()
+        confirm_password = st.text_input("Confirm Password", type="password", key="confirm_register_password").strip()
 
         # Register a new user
         if st.button("Register"):
-            if username_exists(username):
+            if new_username == "":
+                st.error("Username cannot be blank.")
+            elif username_exists(new_username):
                 st.error("Username is already taken. Please choose a different one.")
+            elif new_password == "":
+                st.error("Password cannot be blank.")
+            elif new_password != confirm_password:
+                st.error("Passwords do not match.")
             else:
-                add_user(username, password)
+                add_user(new_username, new_password)
                 st.success("Registration successful! You can now log in.")
+
+
 
 # Define the important notice display function
 def display_important_notice():
