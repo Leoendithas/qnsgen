@@ -458,11 +458,11 @@ def generate_questions_page():
             # Display generated questions with individual checkboxes
             selected_for_saving = []
             for i, qa in enumerate(st.session_state['questions_and_answers']):
-                # Ensure the question and answer are shown as one unit
+                # Ensure the question and answer are retrieved from the dictionary
                 question_text = qa.get('question', 'No question found')
                 answer_text = qa.get('answer', 'No answer found')
 
-                # Show one checkbox for the entire question and answer
+                # Combine question and answer for display with one checkbox
                 combined_text = f"**Q:** {question_text}\n\n**A:** {answer_text}"
 
                 if select_all:
@@ -492,6 +492,7 @@ def generate_questions_page():
                         st.success(f"Successfully saved {successfully_saved} question(s)!")
                     else:
                         st.warning("No questions selected to save.")
+
 
             with col2:
                 # Regenerate button
