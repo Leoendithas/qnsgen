@@ -458,11 +458,18 @@ def generate_questions_page():
             # Display generated questions with individual checkboxes
             selected_for_saving = []
             for i, qa in enumerate(st.session_state['questions_and_answers']):
+                # Ensure the question and answer are shown as one unit
+                question_text = qa.get('question', 'No question found')
+                answer_text = qa.get('answer', 'No answer found')
+
+                # Show one checkbox for the entire question and answer
+                combined_text = f"**Q:** {question_text}\n\n**A:** {answer_text}"
+
                 if select_all:
                     selected_for_saving.append(qa)
-                    st.checkbox(qa, value=True, key=f"qa_{i}", disabled=True)  # Keep the actual generated QA text
+                    st.checkbox(combined_text, value=True, key=f"qa_{i}", disabled=True)
                 else:
-                    if st.checkbox(qa, key=f"qa_{i}"):
+                    if st.checkbox(combined_text, key=f"qa_{i}"):
                         selected_for_saving.append(qa)
 
             # Show Save and Regenerate buttons even if no checkboxes are selected
@@ -473,38 +480,18 @@ def generate_questions_page():
                 if st.button("Save Selected Questions"):
                     if selected_for_saving:  # Ensure there are selected questions to save
                         successfully_saved = 0
-                        failed_to_parse = 0
-
-                        # Regular expression to capture the question and answer
-                        qa_pattern = r"\*\*Question:\*\*(.*?)\*\*Suggested Answer:\*\*(.*)"
 
                         for qa in selected_for_saving:
-                            # Try to extract question and answer using regex
-                            match = re.search(qa_pattern, qa, re.DOTALL)
-                            if match:
-                                question_text = match.group(1).strip()
-                                answer_text = match.group(2).strip()
+                            question_text = qa['question']
+                            answer_text = qa['answer']
 
-                                if question_text and answer_text:
-                                    # Save question and answer to the database
-                                    save_question(st.session_state['username'], question_text, answer_text)
-                                    successfully_saved += 1
-                                else:
-                                    failed_to_parse += 1
-                            else:
-                                # If no match found, count it as a parse failure
-                                failed_to_parse += 1
+                            # Save question and answer to the database
+                            save_question(st.session_state['username'], question_text, answer_text)
+                            successfully_saved += 1
 
-                        if successfully_saved > 0:
-                            st.success(f"Successfully saved {successfully_saved} question(s)!")
-                        if failed_to_parse > 0:
-                            st.error(f"Failed to parse {failed_to_parse} question(s). Please check the format.")
-
+                        st.success(f"Successfully saved {successfully_saved} question(s)!")
                     else:
                         st.warning("No questions selected to save.")
-
-
-                 
 
             with col2:
                 # Regenerate button
