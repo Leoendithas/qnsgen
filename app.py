@@ -457,6 +457,8 @@ def generate_questions_page():
 
             # Display generated questions with individual checkboxes
             selected_for_saving = []
+            # Display generated questions with individual checkboxes
+            selected_for_saving = []
             for i, qa in enumerate(st.session_state['questions_and_answers']):
                 if select_all:
                     selected_for_saving.append(qa)
@@ -472,27 +474,35 @@ def generate_questions_page():
             with col1:
                 if st.button("Save Selected Questions"):
                     if selected_for_saving:  # Ensure there are selected questions to save
+                        successfully_saved = 0
+                        failed_to_parse = 0
+
                         for qa in selected_for_saving:
-                            # Use regex to extract the question and answer based on '**Question:**' and '**Suggested Answer:**'
-                            import re
+                            # Split the QA pair based on known delimiters for question and answer
+                            try:
+                                question_part, answer_part = qa.split("**Suggested Answer:**")
+                                question_text = question_part.replace("**Question:**", "").strip()
+                                answer_text = answer_part.strip()
 
-                            # Regex to find question and answer text
-                            question_match = re.search(r"\*\*Question:\*\*\n(.+?)\n", qa, re.DOTALL)
-                            answer_match = re.search(r"\*\*Suggested Answer:\*\*\n(.+)", qa, re.DOTALL)
+                                if question_text and answer_text:
+                                    # Save question and answer to the database
+                                    save_question(st.session_state['username'], question_text, answer_text)
+                                    successfully_saved += 1
+                                else:
+                                    failed_to_parse += 1
 
-                            if question_match and answer_match:
-                                question_text = question_match.group(1).strip()
-                                answer_text = answer_match.group(1).strip()
+                            except ValueError:
+                                # If we couldn't split the QA pair, count it as a parse failure
+                                failed_to_parse += 1
 
-                                # Save question and answer to the database
-                                save_question(st.session_state['username'], question_text, answer_text)
-                            else:
-                                st.error("Could not parse the question or answer from the generated content.")
+                        if successfully_saved > 0:
+                            st.success(f"Successfully saved {successfully_saved} question(s)!")
+                        if failed_to_parse > 0:
+                            st.error(f"Failed to parse {failed_to_parse} question(s). Please check the format.")
 
-                        # If no error, show success message
-                        st.success(f"Saved {len(selected_for_saving)} question(s) to your account!")
                     else:
                         st.warning("No questions selected to save.")
+
 
                  
 
