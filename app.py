@@ -88,6 +88,7 @@ def login_or_register():
         st.subheader("Register")
         new_username = st.text_input("New Username", key="register_username")
         new_password = st.text_input("New Password", type="password", key="register_password")
+        password_confirm = st.text_input("Confirm Password", type="password")
 
         # Register a new user
         if st.button("Register"):
