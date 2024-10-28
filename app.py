@@ -1,11 +1,13 @@
 import streamlit as st
 from openai import OpenAI
 
+
 import time
 from streamlit import session_state as state
 
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
+from bson import ObjectId
 import hashlib
 
 # Configure page layout (once per page)
@@ -15,6 +17,7 @@ st.set_page_config(page_title="Question Generator", layout="wide")
 client = MongoClient(st.secrets["mongodb"]["URI"])
 db = client[st.secrets["mongodb"]["DATABASE_NAME"]]
 users_collection = db["users"]
+questions_collection = db["questions"]  # Stores questions
 
 users_collection.create_index("username", unique=True)
 
@@ -49,14 +52,15 @@ def save_question(username, question, answer):
         "question": question,
         "answer": answer
     }
-    users_collection.insert_one(question_data)
+    questions_collection.insert_one(question_data)
 
 def get_saved_questions(username):
-    return list(users_collection.find({"username": username}, {"_id": 1, "question": 1, "answer": 1}))
+    return list(questions_collection.find({"username": username}, {"_id": 1, "question": 1, "answer": 1}))
 
 def delete_selected_questions(question_ids):
     for question_id in question_ids:
-        users_collection.delete_one({"_id": question_id})
+        questions_collection.delete_one({"_id": ObjectId(question_id)})  # Ensure you use ObjectId for MongoDB _id fields
+
 
 def view_saved_questions_page():
     if 'username' not in st.session_state or not st.session_state['logged_in']:
@@ -77,7 +81,7 @@ def view_saved_questions_page():
     
     # Display each question with a checkbox
     for question in saved_questions:
-        question_id = question["_id"]
+        question_id = str(question["_id"])  # Ensure the question ID is a string
         if st.checkbox(f"**Q:** {question['question']}\n**A:** {question['answer']}", key=f"sq_{question_id}"):
             selected_questions.append(question_id)
 
