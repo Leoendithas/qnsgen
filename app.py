@@ -91,11 +91,13 @@ def login_or_register():
 
         # Register a new user
         if st.button("Register"):
-            if add_user(username, password):
-                st.success("Registration successful!")
+            if password != password_confirm:
+                st.error("Passwords do not match!")
+            elif username_exists(username):
+                st.error("Username is already taken. Please choose a different one.")
             else:
-                st.error("User already exists. Please try a different username.")
-
+                add_user(username, password)
+                st.success("Registration successful! You can now log in.")
 
 # Define the important notice display function
 def display_important_notice():
