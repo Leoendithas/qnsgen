@@ -82,7 +82,7 @@ def view_saved_questions_page():
     
     # Display each question with a checkbox
     for question in saved_questions:
-        question_id = question["_id"]
+        question_id = str(question["_id"])
         try:
             # Safely access question and answer fields
             q_text = question.get('question', 'No question found')
@@ -103,7 +103,6 @@ def view_saved_questions_page():
             st.rerun()  # Reload the page to reflect the changes
         else:
             st.warning("Please select at least one question to delete.")
-
 
 
 # Function for login and registration tabs
@@ -151,7 +150,6 @@ def login_or_register():
                 st.success("Registration successful! You can now log in.")
 
 
-
 # Define the important notice display function
 def display_important_notice():
     if 'notice_acknowledged' not in st.session_state:
@@ -171,6 +169,7 @@ def display_important_notice():
 
         if st.button("Acknowledge"):
             st.session_state['notice_acknowledged'] = True
+
 
 # Main function where the notice is displayed and other page logic is handled
 def main():
@@ -214,39 +213,39 @@ client = OpenAI(api_key=st.secrets["api_keys"]["openai"])
 def get_topics(subject):
     topics = {
         "Mathematics": [
- 'ExpandDoubleDifferenceSquares',
- 'ExpandDoubleBracketsMultiplication',
- 'ExpandDoubleBracketsSquare',
- 'ExpandSingleBrackets',
- 'FactorDoubleDifferenceSquares',
- 'FactorIdentitySquare',
- 'FactorDoubleSumProduct',
- 'FactorSingleBrackets',
- 'AlgebraAddingLikeTerms',
- 'AlgebraPowerNegativeExponent',
- 'AlgebraDivisionOfPowerFunctions',
- 'AlgebraPowerOfProduct',
- 'AlgebraProductOfPowerFunctions',
- 'AlgebraProductOfRoots',
- 'FractionArithmeticAddMixed',
- 'FractionArithmeticAddProperCommonDenominator',
- 'FractionArithmeticAddProperUnlikeDenominator',
- 'FractionArithmeticSubtractMixed',
- 'FractionArithmeticDivisionProper',
- 'FractionArithmeticEquivalentConcept',
- 'FractionArithmeticSimilarMixed',
- 'FractionArithmeticMultiplicationMixed',
- 'FractionArithmeticMultiplicationProper',
- 'EquationsBalanceMethodArrangeTerms',
- 'EquationsSplitFactors',
- 'EquationsFactorLHS',
- 'EquationsInvertingPower',
- 'EquationsOperationsAdd',
- 'EquationsOperationsMultiply',
- 'EquationsOperationsPower',
- 'EquationsQuadraticFormulaDiscriminant',
- 'RoundingDecimals'
-],
+            'ExpandDoubleDifferenceSquares',
+            'ExpandDoubleBracketsMultiplication',
+            'ExpandDoubleBracketsSquare',
+            'ExpandSingleBrackets',
+            'FactorDoubleDifferenceSquares',
+            'FactorIdentitySquare',
+            'FactorDoubleSumProduct',
+            'FactorSingleBrackets',
+            'AlgebraAddingLikeTerms',
+            'AlgebraPowerNegativeExponent',
+            'AlgebraDivisionOfPowerFunctions',
+            'AlgebraPowerOfProduct',
+            'AlgebraProductOfPowerFunctions',
+            'AlgebraProductOfRoots',
+            'FractionArithmeticAddMixed',
+            'FractionArithmeticAddProperCommonDenominator',
+            'FractionArithmeticAddProperUnlikeDenominator',
+            'FractionArithmeticSubtractMixed',
+            'FractionArithmeticDivisionProper',
+            'FractionArithmeticEquivalentConcept',
+            'FractionArithmeticSimilarMixed',
+            'FractionArithmeticMultiplicationMixed',
+            'FractionArithmeticMultiplicationProper',
+            'EquationsBalanceMethodArrangeTerms',
+            'EquationsSplitFactors',
+            'EquationsFactorLHS',
+            'EquationsInvertingPower',
+            'EquationsOperationsAdd',
+            'EquationsOperationsMultiply',
+            'EquationsOperationsPower',
+            'EquationsQuadraticFormulaDiscriminant',
+            'RoundingDecimals'
+        ],
         "English": ["-"],
     }
     return topics.get(subject, ["General Topic"])
@@ -254,101 +253,101 @@ def get_topics(subject):
 # Function to dynamically fetch learning objectives based on the selected topic
 def get_learning_objectives(topic):
     objectives = {
-    "ExpandDoubleDifferenceSquares": ["SignError"],
-    "ExpandDoubleBracketsMultiplication": ["NoCrossTerms", "MissingTerms"],
-    "ExpandDoubleBracketsSquare": ["NoCrossTerms"],
-    "ExpandSingleBrackets": ["DoubleMultiplication", "SkippingTerms", "SignError", "MissingBrackets"],
-    "FactorDoubleDifferenceSquares": ["SignError"],
-    "FactorIdentitySquare": ["SignError"],
-    "FactorDoubleSumProduct": ["SwitchedSumProduct"],
-    "FactorSingleBrackets": ["SignError", "SkippingTerms"],
-    "AlgebraAddingLikeTerms": ["UnlikeTerms"],
-    "AlgebraPowerNegativeExponent": ["ChangingTermType"],
-    "AlgebraDivisionOfPowerFunctions": ["DividingExponents", "DifferentBase"],
-    "AlgebraPowerOfProduct": ["SignError", "NotAllFactors"],
-    "AlgebraProductOfPowerFunctions": ["MultiplyingExponents", "DifferentBase"],
-    "AlgebraProductOfRoots": ["MultiplyingFactor"],
-    "FractionArithmeticAddMixed": ["AddedDenominator", "IncorrectFractionalPart", "IncorrectIntegerPart"],
-    "FractionArithmeticAddProperCommonDenominator": ["AddedDenominator"],
-    "FractionArithmeticAddProperUnlikeDenominator": ["AddedDenominator", "SubtractedDenominator"],
-    "FractionArithmeticSubtractMixed": ["AddedDenominator", "AddedFractionalPart"],
-    "FractionArithmeticDivisionProper": ["NotFlippingFraction", "FlippingWrongFraction", "FlippingBothFractions", "SubtractionInsteadOfDivision"],
-    "FractionArithmeticEquivalentConcept": ["EquivalentEqual", "EquivalentNumerator", "EquivalentNumeratorDenominator"],
-    "FractionArithmeticSimilarMixed": ["MixedFractionConcept"],
-    "FractionArithmeticMultiplicationMixed": ["MultiplyingFractionalPartOnly"],
-    "FractionArithmeticMultiplicationProper": ["CreatingSimilarFractionsToMultiply"],
-    "EquationsBalanceMethodArrangeTerms": ["CrossMultiplicationDone", "ArrangeToZero"],
-    "EquationsSplitFactors": ["SplitFactorOnNonzeroRHS"],
-    "EquationsFactorLHS": ["FactorDivide"],
-    "EquationsInvertingPower": ["IncorrectOrder", "MissingSecondSolution", "ExtraSecondSolution", "InvalidSecondSolution"],
-    "EquationsOperationsAdd": ["AddSubtract"],
-    "EquationsOperationsMultiply": ["MultiplyOneSide", "MultiplyAllTerms"],
-    "EquationsOperationsPower": ["SignError", "FlipSign", "MissingBrackets"],
-    "EquationsQuadraticFormulaDiscriminant": ["MixedCoefficients"],
-    "RoundingDecimals": ["RoundErrorUpDown"],
-    
-    "-": [
-    "Missing: Adjective",
-    "Missing: Adverb",
-    "Missing: Conjunction",
-    "Missing: Determiner",
-    "Missing: Noun",
-    "Missing: Particle",
-    "Missing: Preposition",
-    "Missing: Pronoun",
-    "Missing: Punctuation",
-    "Missing: Verb",
-    "Missing: Contraction",
-    "Missing: Word/Phrase",
-    "Missing: Possessive",
-    "Missing: Verb Form",
-    "Missing: Verb Tense",
-    "Unnecessary: Adjective",
-    "Unnecessary: Adverb",
-    "Unnecessary: Conjunction",
-    "Unnecessary: Determiner",
-    "Unnecessary: Noun",
-    "Unnecessary: Particle",
-    "Unnecessary: Preposition",
-    "Unnecessary: Pronoun",
-    "Unnecessary: Punctuation",
-    "Unnecessary: Verb",
-    "Unnecessary: Contraction",
-    "Unnecessary: Space",
-    "Unnecessary: Word/Phrase",
-    "Unnecessary: Possessive",
-    "Unnecessary: Verb Form",
-    "Unnecessary: Verb Tense",
-    "Unnecessary: Contraction",
-    "Replace: Adjective",
-    "Replace: Adverb",
-    "Replace: Conjunction",
-    "Replace: Determiner",
-    "Replace: Noun",
-    "Replace: Particle",
-    "Replace: Preposition",
-    "Replace: Pronoun",
-    "Replace: Punctuation",
-    "Replace: Verb",
-    "Replace: Word Form",
-    "Replace: Capitalisation",
-    "Replace: Word/Phrase",
-    "Replace: Spelling",
-    "Replace: Word Order",
-    "Replace: Noun Number",
-    "Replace: Possessive Noun",
-    "Replace: Verb Form",
-    "Replace: Verb Spelling",
-    "Replace: Subject-Verb Agreement",
-    "Replace: Verb Tense",
-    "Replace: Adjective",
-    "Replace: Noun Number",
-    "Sentence: Run-On",
-    "Sentence: Unnecessary Words",
-    "Sentence: Fragment",
-    "Collocation: Suggestion"
-    ]
-}
+        "ExpandDoubleDifferenceSquares": ["SignError"],
+        "ExpandDoubleBracketsMultiplication": ["NoCrossTerms", "MissingTerms"],
+        "ExpandDoubleBracketsSquare": ["NoCrossTerms"],
+        "ExpandSingleBrackets": ["DoubleMultiplication", "SkippingTerms", "SignError", "MissingBrackets"],
+        "FactorDoubleDifferenceSquares": ["SignError"],
+        "FactorIdentitySquare": ["SignError"],
+        "FactorDoubleSumProduct": ["SwitchedSumProduct"],
+        "FactorSingleBrackets": ["SignError", "SkippingTerms"],
+        "AlgebraAddingLikeTerms": ["UnlikeTerms"],
+        "AlgebraPowerNegativeExponent": ["ChangingTermType"],
+        "AlgebraDivisionOfPowerFunctions": ["DividingExponents", "DifferentBase"],
+        "AlgebraPowerOfProduct": ["SignError", "NotAllFactors"],
+        "AlgebraProductOfPowerFunctions": ["MultiplyingExponents", "DifferentBase"],
+        "AlgebraProductOfRoots": ["MultiplyingFactor"],
+        "FractionArithmeticAddMixed": ["AddedDenominator", "IncorrectFractionalPart", "IncorrectIntegerPart"],
+        "FractionArithmeticAddProperCommonDenominator": ["AddedDenominator"],
+        "FractionArithmeticAddProperUnlikeDenominator": ["AddedDenominator", "SubtractedDenominator"],
+        "FractionArithmeticSubtractMixed": ["AddedDenominator", "AddedFractionalPart"],
+        "FractionArithmeticDivisionProper": ["NotFlippingFraction", "FlippingWrongFraction", "FlippingBothFractions", "SubtractionInsteadOfDivision"],
+        "FractionArithmeticEquivalentConcept": ["EquivalentEqual", "EquivalentNumerator", "EquivalentNumeratorDenominator"],
+        "FractionArithmeticSimilarMixed": ["MixedFractionConcept"],
+        "FractionArithmeticMultiplicationMixed": ["MultiplyingFractionalPartOnly"],
+        "FractionArithmeticMultiplicationProper": ["CreatingSimilarFractionsToMultiply"],
+        "EquationsBalanceMethodArrangeTerms": ["CrossMultiplicationDone", "ArrangeToZero"],
+        "EquationsSplitFactors": ["SplitFactorOnNonzeroRHS"],
+        "EquationsFactorLHS": ["FactorDivide"],
+        "EquationsInvertingPower": ["IncorrectOrder", "MissingSecondSolution", "ExtraSecondSolution", "InvalidSecondSolution"],
+        "EquationsOperationsAdd": ["AddSubtract"],
+        "EquationsOperationsMultiply": ["MultiplyOneSide", "MultiplyAllTerms"],
+        "EquationsOperationsPower": ["SignError", "FlipSign", "MissingBrackets"],
+        "EquationsQuadraticFormulaDiscriminant": ["MixedCoefficients"],
+        "RoundingDecimals": ["RoundErrorUpDown"],
+        
+        "-": [
+            "Missing: Adjective",
+            "Missing: Adverb",
+            "Missing: Conjunction",
+            "Missing: Determiner",
+            "Missing: Noun",
+            "Missing: Particle",
+            "Missing: Preposition",
+            "Missing: Pronoun",
+            "Missing: Punctuation",
+            "Missing: Verb",
+            "Missing: Contraction",
+            "Missing: Word/Phrase",
+            "Missing: Possessive",
+            "Missing: Verb Form",
+            "Missing: Verb Tense",
+            "Unnecessary: Adjective",
+            "Unnecessary: Adverb",
+            "Unnecessary: Conjunction",
+            "Unnecessary: Determiner",
+            "Unnecessary: Noun",
+            "Unnecessary: Particle",
+            "Unnecessary: Preposition",
+            "Unnecessary: Pronoun",
+            "Unnecessary: Punctuation",
+            "Unnecessary: Verb",
+            "Unnecessary: Contraction",
+            "Unnecessary: Space",
+            "Unnecessary: Word/Phrase",
+            "Unnecessary: Possessive",
+            "Unnecessary: Verb Form",
+            "Unnecessary: Verb Tense",
+            "Unnecessary: Contraction",
+            "Replace: Adjective",
+            "Replace: Adverb",
+            "Replace: Conjunction",
+            "Replace: Determiner",
+            "Replace: Noun",
+            "Replace: Particle",
+            "Replace: Preposition",
+            "Replace: Pronoun",
+            "Replace: Punctuation",
+            "Replace: Verb",
+            "Replace: Word Form",
+            "Replace: Capitalisation",
+            "Replace: Word/Phrase",
+            "Replace: Spelling",
+            "Replace: Word Order",
+            "Replace: Noun Number",
+            "Replace: Possessive Noun",
+            "Replace: Verb Form",
+            "Replace: Verb Spelling",
+            "Replace: Subject-Verb Agreement",
+            "Replace: Verb Tense",
+            "Replace: Adjective",
+            "Replace: Noun Number",
+            "Sentence: Run-On",
+            "Sentence: Unnecessary Words",
+            "Sentence: Fragment",
+            "Collocation: Suggestion"
+        ]
+    }
     return objectives.get(topic)
 
 # Function to generate a prompt based on subject, topic, and learning objective
@@ -364,7 +363,7 @@ def create_prompt(subject, topic, learning_objective):
 # Function to call OpenAI API to generate questions and answers
 def generate_questions_and_answers(prompt):
     response = client.chat.completions.create(
-        model="gpt-4o-2024-08-06",  
+        model="gpt-4",  
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
@@ -372,7 +371,25 @@ def generate_questions_and_answers(prompt):
         max_tokens=800,
         temperature=0.3
     )
-    return response.choices[0].message.content.strip()
+    content = response.choices[0].message.content.strip()
+
+    # Split content to separate each question and answer based on your formatting style
+    qa_pairs = re.split(r'(?=\*\*Question:)', content)  # Splitting on "Question:" (add formatting marker)
+    formatted_qas = []
+
+    for qa in qa_pairs:
+        question_match = re.search(r"\*\*Question:\*\*(.*?)(?=\*\*Suggested Answer)", qa, re.DOTALL)
+        answer_match = re.search(r"\*\*Suggested Answer:\*\*(.*)", qa, re.DOTALL)
+
+        if question_match and answer_match:
+            question_text = question_match.group(1).strip()
+            answer_text = answer_match.group(1).strip()
+            formatted_qas.append({"question": question_text, "answer": answer_text})
+        else:
+            st.error("Could not parse the question or answer from the generated content.")
+
+    return formatted_qas
+
 
 # Function to regenerate selected questions
 def regenerate_questions(selected_questions):
@@ -384,8 +401,7 @@ def regenerate_questions(selected_questions):
     prompt = f"""You are a seasoned educator who specialises in helping students close their learning gaps.
     Using the following questions and their answers as reference, 
     generate {num_questions} new question(s) and their suggested answers:
-    \n\n""" + "\n\n".join(selected_questions)
-    
+    \n\n""" + "\n\n".join([f"**Q:** {qa['question']}\n**A:** {qa['answer']}" for qa in selected_questions])
     
     # Regenerate the questions using OpenAI
     return generate_questions_and_answers(prompt)
@@ -437,16 +453,8 @@ def generate_questions_page():
                 with st.spinner("Generating questions and answers..."):
                     questions_and_answers = generate_questions_and_answers(prompt)
 
-                # Format the response for better readability (New lines for question vs answer and bold headers)
-                formatted_qas = []
-                qas_list = questions_and_answers.split("\n\n")
-                for i, qa in enumerate(qas_list):
-                    # Insert new lines between question and answer and bold the headers
-                    formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
-                    formatted_qas.append(formatted_qa)
-
                 # Store the formatted questions and answers in session state
-                st.session_state['questions_and_answers'] = formatted_qas
+                st.session_state['questions_and_answers'] = questions_and_answers
 
         # Only display the questions and answers after they are generated
         if st.session_state['questions_and_answers']:
@@ -458,7 +466,7 @@ def generate_questions_page():
             # Display generated questions with individual checkboxes
             selected_for_saving = []
             for i, qa in enumerate(st.session_state['questions_and_answers']):
-                # Ensure the question and answer are retrieved from the dictionary
+                # Retrieve the question and answer from the dictionary
                 question_text = qa.get('question', 'No question found')
                 answer_text = qa.get('answer', 'No answer found')
 
@@ -501,15 +509,8 @@ def generate_questions_page():
                         with st.spinner("Regenerating selected questions..."):
                             regenerated_questions = regenerate_questions(selected_for_saving)
                         
-                        # Format the regenerated questions and store them in session state
-                        formatted_regenerated_qas = []
-                        qas_list = regenerated_questions.split("\n\n")
-                        for i, qa in enumerate(qas_list):
-                            formatted_qa = qa.replace('Q:', '**Question:**\n').replace('A:', '\n**Suggested Answer:**\n')
-                            formatted_regenerated_qas.append(formatted_qa)
-
                         # Store regenerated questions in session state
-                        st.session_state['regenerated_questions'] = formatted_regenerated_qas
+                        st.session_state['regenerated_questions'] = regenerated_questions
 
         # Display regenerated questions if available
         if st.session_state['regenerated_questions']:
@@ -518,15 +519,21 @@ def generate_questions_page():
             # Use checkboxes for regenerated questions
             selected_for_saving_regenerated = []
             for i, qa in enumerate(st.session_state['regenerated_questions']):
-                if st.checkbox(qa, key=f"regenerated_qa_{i}"):
+                question_text = qa.get('question', 'No question found')
+                answer_text = qa.get('answer', 'No answer found')
+
+                combined_text = f"**Q:** {question_text}\n\n**A:** {answer_text}"
+
+                if st.checkbox(combined_text, key=f"regenerated_qa_{i}"):
                     selected_for_saving_regenerated.append(qa)
 
             # Save regenerated questions
             if st.button("Save Regenerated Questions"):
-                if 'saved_questions' not in st.session_state:
-                    st.session_state['saved_questions'] = []
-                st.session_state['saved_questions'].extend(selected_for_saving_regenerated)
-                st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s) and answer(s)!")
+                if selected_for_saving_regenerated:
+                    for qa in selected_for_saving_regenerated:
+                        save_question(st.session_state['username'], qa['question'], qa['answer'])
+                    st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s)!")
+
 
 # Page: About Us
 def about_us_page():
