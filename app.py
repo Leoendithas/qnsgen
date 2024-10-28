@@ -338,8 +338,7 @@ This project’s potential impact is significant enough as it aligns with the on
 # Page: Methodology
 def methodology_page():
     st.title("Methodology")
-
-
+    st.image("images/Qns Gen User Flow.png", use_column_width=True)
 
 # Page: Home
 def home_page():
