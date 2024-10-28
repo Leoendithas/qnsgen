@@ -495,15 +495,6 @@ def generate_questions_page():
                 st.session_state['saved_questions'].extend(selected_for_saving_regenerated)
                 st.success(f"Saved {len(selected_for_saving_regenerated)} regenerated question(s) and answer(s)!")
 
-
-def view_saved_questions_page():
-    st.title("View Saved Questions")
-    if 'saved_questions' in st.session_state and st.session_state['saved_questions']:
-        for saved_qa in st.session_state['saved_questions']:
-            st.write(saved_qa)
-    else:
-        st.info("No questions have been saved yet.")
-
 # Page: About Us
 def about_us_page():
     st.title("About Us")
