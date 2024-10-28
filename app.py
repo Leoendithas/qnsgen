@@ -357,7 +357,7 @@ def create_prompt(subject, topic, learning_objective):
     Generate five questions along with suggested answers for the skill '{topic}' 
     and skill error that needs to be worked on: '{learning_objective}'
     The subject is '{subject}'.
-    Return the questions and suggested answers in bolded headers.
+    Return the questions and suggested answers using this format: **Question:** and **Suggested Answer:** when generating questions.
     Do not generate any other text aside from the question and answer.
     """
 
