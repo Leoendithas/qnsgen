@@ -473,27 +473,27 @@ def generate_questions_page():
                 if st.button("Save Selected Questions"):
                     if selected_for_saving:  # Ensure there are selected questions to save
                         for qa in selected_for_saving:
-                            # Extract question and answer by splitting the text
-                            question_text = ""
-                            answer_text = ""
-                            
-                            # Look for "Question" and "Answer" sections
-                            lines = qa.split("\n")
-                            for line in lines:
-                                if line.startswith("**Question:**"):
-                                    question_text = line.replace("**Question:**", "").strip()
-                                elif line.startswith("**Suggested Answer:**"):
-                                    answer_text = line.replace("**Suggested Answer:**", "").strip()
+                            # Use regex to extract the question and answer based on '**Question:**' and '**Suggested Answer:**'
+                            import re
 
-                            # Check if both question and answer are found before saving
-                            if question_text and answer_text:
+                            # Regex to find question and answer text
+                            question_match = re.search(r"\*\*Question:\*\*\n(.+?)\n", qa, re.DOTALL)
+                            answer_match = re.search(r"\*\*Suggested Answer:\*\*\n(.+)", qa, re.DOTALL)
+
+                            if question_match and answer_match:
+                                question_text = question_match.group(1).strip()
+                                answer_text = answer_match.group(1).strip()
+
+                                # Save question and answer to the database
                                 save_question(st.session_state['username'], question_text, answer_text)
                             else:
                                 st.error("Could not parse the question or answer from the generated content.")
 
+                        # If no error, show success message
                         st.success(f"Saved {len(selected_for_saving)} question(s) to your account!")
                     else:
                         st.warning("No questions selected to save.")
+
                  
 
             with col2:
